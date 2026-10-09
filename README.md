@@ -77,3 +77,19 @@ tiger:
 <div align="center">
   <i>Developed with ❤️ by <b>Cytech Team Development</b></i>
 </div>
+
+---
+
+<!-- CYTECH_STAR_HISTORY:START -->
+
+## Star History
+
+<a href="https://star-history.dera.page/#CyoriaSMP-Team/PetKuEngSus&type=date&legend=top-left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=CyoriaSMP-Team/PetKuEngSus&type=date&legend=top-left&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=CyoriaSMP-Team/PetKuEngSus&type=date&legend=top-left" />
+    <img alt="GitHub star history for CyoriaSMP-Team/PetKuEngSus" src="https://star-history.dera.page/svg?repos=CyoriaSMP-Team/PetKuEngSus&type=date&legend=top-left" width="800" />
+  </picture>
+</a>
+
+<!-- CYTECH_STAR_HISTORY:END -->
