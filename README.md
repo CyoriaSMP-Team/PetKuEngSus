@@ -10,6 +10,15 @@
 
 </div>
 
+<!-- CYTECH_README_REFRESH:START -->
+<p align="center"><img alt="Minecraft pets and RPG framework section accent" width="100%" height="10" src="https://capsule-render.vercel.app/api?type=rect&color=0:0F172A,100:16A34A&height=10&section=header"></p>
+
+<p align="center"><sub>Minecraft pets and RPG framework</sub></p>
+
+<p align="center"><a href="#-features">✨ Features</a> &nbsp;·&nbsp; <a href="#-commands">💻 Commands</a> &nbsp;·&nbsp; <a href="#-installation">🛠️ Installation</a> &nbsp;·&nbsp; <a href="#-creating-custom-pets">📖 Creating Custom Pets</a> &nbsp;·&nbsp; <a href="https://github.com/CyoriaSMP-Team/PetKuEngSus/issues">Issues</a> &nbsp;·&nbsp; <a href="https://github.com/CyoriaSMP-Team/PetKuEngSus/releases">Releases</a></p>
+
+<!-- CYTECH_README_REFRESH:END -->
+
 **PetKuEngSus** is an advanced, standalone Pet & RPG framework designed for modern Minecraft servers. Originally forked from EcoPets, this plugin has been completely rewritten to run independently without the need for `eco` or `libreforge` dependencies, giving you a lightweight but incredibly powerful pet companion system.
 
 ---
