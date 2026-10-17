@@ -2,9 +2,9 @@ package com.petkuengsus.petkuengsus.pets
 
 import com.petkuengsus.petkuengsus.internal.ItemStackBuilder
 import com.petkuengsus.petkuengsus.internal.SimpleMenu
+import com.petkuengsus.petkuengsus.internal.TaskScheduler
 import com.petkuengsus.petkuengsus.internal.StringUtils
 import com.petkuengsus.petkuengsus.plugin
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -141,7 +141,7 @@ class PetLevelGUI(private val pet: Pet) {
         val mat = try { Material.valueOf(raw.uppercase()) } catch (_: Exception) { Material.ARROW }
         val item = ItemStackBuilder(mat).setDisplayName(name).build()
         menu.setItem(slot, item) { p, _ ->
-            Bukkit.getScheduler().runTask(plugin, Runnable { PetsGUI.open(p) })
+            TaskScheduler.entity(p, plugin, task = Runnable { PetsGUI.open(p) })
         }
     }
 
@@ -172,7 +172,7 @@ class PetLevelGUI(private val pet: Pet) {
             val mat = try { Material.valueOf(raw.uppercase()) } catch (_: Exception) { Material.ARROW }
             val item = ItemStackBuilder(mat).setDisplayName(name).build()
             menu.setItem(slot, item) { p, _ ->
-                Bukkit.getScheduler().runTask(plugin, Runnable { open(p, currentPage - 1) })
+                TaskScheduler.entity(p, plugin, task = Runnable { open(p, currentPage - 1) })
             }
         }
         if (currentPage < totalPages - 1) {
@@ -185,7 +185,7 @@ class PetLevelGUI(private val pet: Pet) {
             val mat = try { Material.valueOf(raw.uppercase()) } catch (_: Exception) { Material.ARROW }
             val item = ItemStackBuilder(mat).setDisplayName(name).build()
             menu.setItem(slot, item) { p, _ ->
-                Bukkit.getScheduler().runTask(plugin, Runnable { open(p, currentPage + 1) })
+                TaskScheduler.entity(p, plugin, task = Runnable { open(p, currentPage + 1) })
             }
         }
     }

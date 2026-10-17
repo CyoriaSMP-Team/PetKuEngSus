@@ -16,6 +16,7 @@ import com.petkuengsus.petkuengsus.internal.PlayerPlaceholder
 import com.petkuengsus.petkuengsus.internal.PlayerStaticPlaceholder
 import com.petkuengsus.petkuengsus.internal.SimpleConfig
 import com.petkuengsus.petkuengsus.internal.SimpleMenu
+import com.petkuengsus.petkuengsus.internal.TaskScheduler
 import com.petkuengsus.petkuengsus.internal.StringUtils
 import com.petkuengsus.petkuengsus.internal.registerCommand
 import com.petkuengsus.petkuengsus.pets.DiscoverRecipeListener
@@ -211,28 +212,30 @@ class PetKuEngSusPlugin : JavaPlugin() {
         configYml = SimpleConfig(File(dataFolder, "config.yml"))
         PetsGUI.update()
 
-        server.scheduler.runTaskTimer(this, Runnable {
+        TaskScheduler.repeatingGlobal(this, 20, 20, Runnable {
             if (configYml.getBool("auto-deactivate-on-condition-fail")) {
                 for (player in Bukkit.getOnlinePlayers()) {
-                    val activePet = player.activePet ?: continue
-                    if (!activePet.canActivate(player)) {
-                        player.activePet = null
-                        player.sendMessage(
-                            langYml.getMessage("pet-auto-deactivated")
-                                .replace("%pet%", activePet.name)
-                        )
-                    }
+                    TaskScheduler.entity(player, this, task = Runnable {
+                        val activePet = player.activePet ?: return@Runnable
+                        if (!activePet.canActivate(player)) {
+                            player.activePet = null
+                            player.sendMessage(
+                                langYml.getMessage("pet-auto-deactivated")
+                                    .replace("%pet%", activePet.name)
+                            )
+                        }
+                    })
                 }
             }
-        }, 20, 20)
+        })
 
         if (!configYml.getBool("pet-entity.enabled")) {
             return
         }
 
-        server.scheduler.runTaskTimer(this, Runnable {
+        TaskScheduler.repeatingGlobal(this, 1, 1, Runnable {
             petDisplay.tickAll()
-        }, 1, 1)
+        })
     }
 
     override fun onDisable() {

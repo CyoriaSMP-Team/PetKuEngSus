@@ -4,12 +4,12 @@ import com.petkuengsus.petkuengsus.internal.ItemStackBuilder
 import com.petkuengsus.petkuengsus.internal.PlayableSound
 import com.petkuengsus.petkuengsus.internal.SimpleItems
 import com.petkuengsus.petkuengsus.internal.SimpleMenu
+import com.petkuengsus.petkuengsus.internal.TaskScheduler
 import com.petkuengsus.petkuengsus.internal.SkullBuilder
 import com.petkuengsus.petkuengsus.internal.StringUtils
 import com.petkuengsus.petkuengsus.pets.mount.MountManager
 import com.petkuengsus.petkuengsus.pets.transform.TransformationManager
 import com.petkuengsus.petkuengsus.plugin
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -96,7 +96,7 @@ object PetsGUI {
             val itemName = StringUtils.format(plugin.configYml.getString("gui.prev-page.name") ?: "&fPrevious Page")
             val item = simpleConfigItem("gui.prev-page.item", itemName)
             menu.setItem(slot, item) { p, _ ->
-                Bukkit.getScheduler().runTask(plugin, Runnable { open(p, currentPage - 1) })
+                TaskScheduler.entity(p, plugin, task = Runnable { open(p, currentPage - 1) })
             }
         }
 
@@ -107,7 +107,7 @@ object PetsGUI {
             val itemName = StringUtils.format(plugin.configYml.getString("gui.next-page.name") ?: "&fNext Page")
             val item = simpleConfigItem("gui.next-page.item", itemName)
             menu.setItem(slot, item) { p, _ ->
-                Bukkit.getScheduler().runTask(plugin, Runnable { open(p, currentPage + 1) })
+                TaskScheduler.entity(p, plugin, task = Runnable { open(p, currentPage + 1) })
             }
         }
     }
@@ -184,7 +184,7 @@ object PetsGUI {
 
         menu.setItem(toggleSlot, item) { p, _ ->
             p.shouldHidePet = !p.shouldHidePet
-            Bukkit.getScheduler().runTask(plugin, Runnable { open(p, 0) })
+            TaskScheduler.entity(p, plugin, task = Runnable { open(p, 0) })
         }
     }
 
@@ -211,7 +211,7 @@ object PetsGUI {
             } else {
                 MountManager.mount(p)
             }
-            Bukkit.getScheduler().runTask(plugin, Runnable { open(p, 0) })
+            TaskScheduler.entity(p, plugin, task = Runnable { open(p, 0) })
         }
     }
 
@@ -237,7 +237,7 @@ object PetsGUI {
             p.sendMessage(StringUtils.format(
                 plugin.langYml.getMessage("transform.model-changed")?.replace("%type%", nextName) ?: "Model: $next"
             ))
-            Bukkit.getScheduler().runTask(plugin, Runnable { open(p, 0) })
+            TaskScheduler.entity(p, plugin, task = Runnable { open(p, 0) })
         }
     }
 
@@ -263,7 +263,7 @@ object PetsGUI {
 
         menu.setItem(slot, item) { p, _ ->
             TransformationManager.toggleTransformationMode(p)
-            Bukkit.getScheduler().runTask(plugin, Runnable { open(p, 0) })
+            TaskScheduler.entity(p, plugin, task = Runnable { open(p, 0) })
         }
     }
 
