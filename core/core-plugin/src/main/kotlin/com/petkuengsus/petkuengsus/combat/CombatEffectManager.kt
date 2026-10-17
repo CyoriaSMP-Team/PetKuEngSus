@@ -1,7 +1,7 @@
 package com.petkuengsus.petkuengsus.combat
 
 import com.petkuengsus.petkuengsus.plugin
-import org.bukkit.Bukkit
+import com.petkuengsus.petkuengsus.internal.TaskScheduler
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -57,7 +57,7 @@ object CombatEffectManager {
     private fun applyBleed(target: LivingEntity, source: Player, effect: CombatEffect, amplifier: Double, duration: Int) {
         val key = "pet_bleed_${source.uniqueId}"
         target.setMetadata(key, FixedMetadataValue(plugin, duration))
-        val taskId = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+        TaskScheduler.repeatingEntity(target, plugin, 1L, 20L, Runnable {
             if (!target.isValid || target.isDead) {
                 target.removeMetadata(key, plugin)
                 return@Runnable
@@ -70,8 +70,7 @@ object CombatEffectManager {
             }
             target.damage(amplifier, source)
             target.setMetadata(key, FixedMetadataValue(plugin, remaining - 20))
-        }, 0L, 20L).taskId
-        target.setMetadata("${key}_task", FixedMetadataValue(plugin, taskId))
+        })
     }
 
     private fun applyPoison(target: LivingEntity, amplifier: Int, duration: Int) {

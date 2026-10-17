@@ -5,12 +5,16 @@ on:
     paths:
       - '**/*.kt'
       - '**/*.kts'
+      - 'gradle.properties'
+      - 'gradle/wrapper/**'
   push:
     branches:
       - master
     paths:
       - '**/*.kt'
       - '**/*.kts'
+      - 'gradle.properties'
+      - 'gradle/wrapper/**'
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

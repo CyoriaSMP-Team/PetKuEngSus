@@ -1,6 +1,7 @@
 package com.petkuengsus.petkuengsus.pets
 
 import com.petkuengsus.petkuengsus.internal.NumberUtils
+import com.petkuengsus.petkuengsus.internal.TaskScheduler
 import com.petkuengsus.petkuengsus.internal.formatBalance
 import com.petkuengsus.petkuengsus.pets.mount.MountManager
 import com.petkuengsus.petkuengsus.plugin
@@ -17,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.event.world.EntitiesUnloadEvent
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.PI
 import kotlin.math.abs
 
@@ -24,24 +26,27 @@ object PetDisplay : Listener {
     private const val DEFAULT_EYE_HEIGHT = 1.62
     private const val MAX_Y_OFFSET = 0.5
 
+    @Volatile
     private var tick = 0
 
-    private val trackedEntities = mutableMapOf<UUID, PetDisplayEntity>()
+    private val trackedEntities = ConcurrentHashMap<UUID, PetDisplayEntity>()
 
     fun tickAll() {
         for (player in Bukkit.getOnlinePlayers()) {
-            if (player.isOnline && player.location.chunk.isLoaded && player.location.chunk.isEntitiesLoaded) {
-                tickPlayer(player)
-            } else {
-                remove(player)
-            }
+            TaskScheduler.entity(player, plugin, task = Runnable {
+                if (player.isOnline && player.location.chunk.isLoaded && player.location.chunk.isEntitiesLoaded) {
+                    tickPlayer(player)
+                } else {
+                    remove(player)
+                }
+            })
         }
 
         tick++
     }
 
-    private val smoothYOffsetMap = mutableMapOf<UUID, Double>()
-    private val lastUpdateMap = mutableMapOf<UUID, Long>()
+    private val smoothYOffsetMap = ConcurrentHashMap<UUID, Double>()
+    private val lastUpdateMap = ConcurrentHashMap<UUID, Long>()
     private val expireAfterMillis = 5_000L
 
     private fun tickPlayer(player: Player) {
@@ -181,7 +186,7 @@ object PetDisplay : Listener {
 
     fun shutdown() {
         for (stand in trackedEntities.values) {
-            stand.entity.remove()
+            TaskScheduler.entity(stand.entity, plugin, task = Runnable { stand.entity.remove() })
         }
 
         trackedEntities.clear()
@@ -192,13 +197,13 @@ object PetDisplay : Listener {
     }
 
     private fun remove(player: Player) {
-        trackedEntities[player.uniqueId]?.entity?.remove()
-        trackedEntities.remove(player.uniqueId)
+        trackedEntities.remove(player.uniqueId)?.entity?.remove()
     }
 
     private fun remove(uuid: UUID) {
-        trackedEntities[uuid]?.entity?.remove()
-        trackedEntities.remove(uuid)
+        trackedEntities.remove(uuid)?.entity?.let { entity ->
+            TaskScheduler.entity(entity, plugin, task = Runnable { entity.remove() })
+        }
     }
 
     @EventHandler
